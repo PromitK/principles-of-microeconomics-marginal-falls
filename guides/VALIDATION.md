@@ -1,15 +1,10 @@
-# Validation and publication status
+# Validation
 
-Checked on 2 October 2026.
+Checked on 4 October 2026.
 
-- All 17 PDFs were uploaded to the new Drive folder. Readback verified each file's ID, MIME type, size, destination folder, and link.
-- The 17 PDFs bundled in this repository match the supplied originals byte for byte, using SHA-256 comparison.
-- The site has one course homepage and 16 module pages. All 333 internal file and fragment references were checked; none were broken.
-- All 13 linked game entry pages at marginalfalls.com returned HTTP 200. Complete multiplayer sessions were not tested.
-- Course metadata was checked for valid act assignments, consecutive module numbering, and valid activity references.
-- The Python generator and JavaScript source were checked for syntax errors.
-- The GitHub Pages workflow follows the official publishing workflow structure, but has not run in a live GitHub repository.
-
-The CSS includes desktop and mobile layouts. Browser-based visual review and interaction testing could not be completed because a browser executable could not be made available in this environment. Review the rendered site before publication.
-
-The repository was prepared locally. GitHub was not connected at the end of this run, so no remote GitHub repository or public Pages URL has been created. Drive copies currently have owner-only access; the bundled PDFs provide the primary slide links for the future published site.
+- Homepage includes all 16 modules and no separate activity directory.
+- All 16 module pages have Overview and Activity tabs with keyboard navigation.
+- Activity links match the course metadata, including explicit messages for modules without a dedicated activity.
+- Private planning materials and their links are excluded from the public output.
+- Local module, slide, and navigation links resolve correctly.
+- The Python generator runs successfully and the JavaScript passes a syntax check.

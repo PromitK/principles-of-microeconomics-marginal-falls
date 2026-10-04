@@ -41,11 +41,7 @@ The generated course files and all PDFs are already in the `docs/` directory. No
 
 ## Google Drive access
 
-The new PDFs are in [this Drive folder](https://drive.google.com/drive/folders/1eOVBGjhq3G9bi4Oin0zXqAL3A6XuNqAq). Uploads and their file metadata were verified, but their permissions are currently restricted to their owner. The course site uses its bundled PDFs as the primary material links, so a published Pages site does not rely on Drive access.
-
-To make the Drive copies accessible to visitors, open the folder's sharing dialog and set **General access → Anyone with the link → Viewer**, if that option is available for the account. Confirm in a signed-out browser that a module PDF opens. If the account restricts folder sharing, apply the permitted access to the files themselves.
-
-After public Drive access is verified, update the access note in `scripts/build.py` and rebuild. Replace files in Drive to preserve existing links when revising slides.
+Each module links to its own Drive copy. Change access only for the individual lecture slide files; keep course planning documents private. The bundled lecture PDFs provide the primary links.
 
 ## What remains external
 

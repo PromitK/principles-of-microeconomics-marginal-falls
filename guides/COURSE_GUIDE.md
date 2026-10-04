@@ -26,9 +26,9 @@ Keep access codes, recovery passwords, and classroom-session information out of 
 
 ## Source and credit notes
 
-All 17 original supplied PDFs are included without content edits. Stable filenames remove the upload suffix and spaces. `content/materials.json` records the original filenames, page counts, SHA-256 hashes, and verified Drive copy links.
+All 16 lecture slide PDFs are included without content edits. Stable filenames remove the upload suffix and spaces. `content/materials.json` records the original filenames, page counts, SHA-256 hashes, and verified Drive copy links.
 
-The course site follows the uploaded deck numbering. The original syllabus differs for Modules 9–12; that difference is documented in the README and website. Module 8 is titled Seller Sensitivity inside the PDF even though its filename is Profit and Sensitivity.
+The course site follows the uploaded deck numbering. Module 8 is titled Seller Sensitivity inside the PDF even though its filename is Profit and Sensitivity.
 
 Activity descriptions and links were grounded in marginalfalls.com and the lecture slides on 2 October 2026. All 13 linked activity pages returned HTTP 200. This verifies the entry pages, not a complete multiplayer session or every game mechanic.
 

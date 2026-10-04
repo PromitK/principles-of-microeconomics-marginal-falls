@@ -40,3 +40,33 @@
     active = 'all'; search.value = ''; gamesOnly.checked = false; update();
   }));
 })();
+
+
+// Enhance module pages with accessible tabs; both panels remain readable without JavaScript.
+(() => {
+  const tablist = document.querySelector('.module-tabs');
+  if (!tablist) return;
+  const tabs = [...tablist.querySelectorAll('[role="tab"]')];
+  function select(tab, focus = false) {
+    for (const item of tabs) {
+      const selected = item === tab;
+      item.setAttribute('aria-selected', String(selected));
+      item.tabIndex = selected ? 0 : -1;
+      document.getElementById(item.getAttribute('aria-controls')).hidden = !selected;
+    }
+    if (focus) tab.focus();
+  }
+  for (const [index, tab] of tabs.entries()) {
+    tab.addEventListener('click', () => select(tab));
+    tab.addEventListener('keydown', event => {
+      let next;
+      if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+      if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
+      if (event.key === 'Home') next = 0;
+      if (event.key === 'End') next = tabs.length - 1;
+      if (next !== undefined) { event.preventDefault(); select(tabs[next], true); }
+    });
+  }
+  tablist.hidden = false;
+  select(tabs[0]);
+})();

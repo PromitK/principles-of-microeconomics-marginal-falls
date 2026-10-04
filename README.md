@@ -13,8 +13,6 @@ The sequence builds buyers and sellers separately before bringing them together 
 ## Start here
 
 - **Course website:** the complete static site is in [`docs/`](docs/index.html), ready for GitHub Pages.
-- **Syllabus:** [PDF](docs/materials/ECON_2005_Syllabus.pdf) · [Google Drive](https://drive.google.com/file/d/1PYl36bEPKxN06vcSJEyfqNLgzpPZKo45/view?usp=drivesdk)
-- **All Drive copies:** [course folder](https://drive.google.com/drive/folders/1eOVBGjhq3G9bi4Oin0zXqAL3A6XuNqAq)
 - **Classroom activities:** [Marginal Falls](https://marginalfalls.com/)
 - **Run the activities:** [instructor manual](https://marginalfalls.com/instructors/) · [request instructor access](https://marginalfalls.com/contact/)
 
@@ -32,7 +30,7 @@ The bundled PDFs are the primary slide links. The newly uploaded Drive copies cu
 
 ## Modules and materials
 
-Module order follows the uploaded slide decks. Chapter references use the Hubbard & O’Brien text listed in the syllabus.
+Module order follows the lecture slide decks. Chapter references use Hubbard & O’Brien.
 
 | Module | Setting | Topic | Chapter | Slides | Activities |
 | --- | --- | --- | --- | --- | --- |
@@ -55,7 +53,7 @@ Module order follows the uploaded slide decks. Chapter references use the Hubbar
 
 ### Source differences
 
-The original syllabus puts Hiring Hall at Module 9 in Act III, followed by Town Square, Fair Play, and Town Crises at Modules 10–12. The supplied decks instead label those topics Town Square (9), Fair Play (10), Town Crisis (11), and Hiring Hall (12), all in Act IV. The site follows the decks and preserves the original syllabus.
+The site follows the lecture deck numbering: Town Square (9), Fair Play (10), Town Crisis (11), and Hiring Hall (12), all in Act IV.
 
 Module 8 is named Profit and Sensitivity in its filename and Seller Sensitivity on its title slide. Its topic is price elasticity of supply.
 

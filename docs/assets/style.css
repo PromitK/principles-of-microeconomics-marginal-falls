@@ -4,3 +4,54 @@
 @media(max-width:760px){.container{width:calc(100% - 36px)}.header-inner{padding:15px 18px;flex-direction:column;align-items:flex-start;gap:16px;min-height:0}.site-header{position:relative}.site-header nav{width:100%;gap:12px;justify-content:space-between;font-size:11px}.brand{font-size:19px}.brand-sub{font-size:9px}.hero{grid-template-columns:1fr;gap:35px;padding-top:42px;padding-bottom:40px}.hero h1{font-size:48px;line-height:1.1}.hero-description{font-size:15px}.hero-art{min-height:350px;max-width:460px;width:100%;justify-self:center}.hero-art img{height:310px}.hero-actions{gap:10px}.button{font-size:11px;padding:12px 15px}.stats-inner{grid-template-columns:repeat(2,1fr);gap:22px;padding:25px 0}.stats-inner strong{font-size:23px}.section{padding-top:48px;padding-bottom:48px}.story-section{grid-template-columns:1fr;gap:25px}.story-text p{font-size:14px}.story-text .story-note{font-size:18px}.route-grid{grid-template-columns:1fr;gap:12px}.route-stop strong{font-size:12px}.route-stop span{width:30px;height:30px;font-size:15px}.route-stop{gap:15px}.section-heading{align-items:start;flex-direction:column;gap:15px;margin-bottom:25px}.section-heading h2{font-size:34px}.course-controls{padding:15px;gap:15px;margin-bottom:22px}.search-field{flex-basis:100%;min-width:0}.filter-set{gap:4px}.filter-button{font-size:10px;padding:8px 9px}.act-block{grid-template-columns:1fr;gap:16px;padding:25px 0}.act-intro{padding-top:0}.act-intro h3{font-size:25px}.act-intro p{margin-top:8px;font-size:12px}.act-roman{font-size:32px;min-width:30px}.module-row{gap:12px;padding:18px 0}.module-copy h4{font-size:14px}.module-copy p{font-size:11px}.module-number{font-size:23px;min-width:29px}.module-actions{min-width:77px}.module-open{font-size:11px}.slides-link{font-size:9px}.games-grid{grid-template-columns:1fr}.game-card{padding:23px}.game-card h3{font-size:23px}.instructor-section{grid-template-columns:1fr;gap:35px}.resources-inner{align-items:flex-start;flex-direction:column;gap:25px}.footer-inner{grid-template-columns:1fr;gap:25px}.site-footer{padding:32px 0}.module-page{padding-top:22px}.module-hero{padding-top:32px}.module-hero h1{font-size:40px}.module-topic{font-size:16px}.module-body{grid-template-columns:1fr;gap:28px;padding:35px 0}.module-body h2{font-size:28px}.module-story{font-size:14px}.discussion-box{padding:20px}.discussion-box>p:last-child{font-size:19px}.module-games{grid-template-columns:1fr}.module-pagination{font-size:10px;gap:12px}.breadcrumb{font-size:10px;gap:8px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 @media print{.site-header,.hero-art,.course-controls,.site-footer,.module-pagination,.hero-actions,.module-actions,.instructor-actions{display:none!important}.container{width:100%}.section{padding:20px 0}.hero{display:block;padding:20px 0}.hero h1{font-size:36px}.games-grid{grid-template-columns:repeat(2,1fr)}.game-card,.module-row,.act-block{break-inside:avoid}.act-block{grid-template-columns:200px 1fr;gap:20px}.module-body{grid-template-columns:1.5fr 1fr;gap:25px}body{background:white}a{color:black}.stats-band,.route-band,.games-section,.resources-section{background:white;color:black}.stats-inner strong,.stats-inner span{color:black}.button{background:white;color:black}}
+
+/* Stronger type and contrast, retaining the town's forest green identity. */
+:root{--paper:#f7f8f3;--white:#ffffff;--green:#123f32;--ink:#142f27;--muted:#4b6056;--gold:#bd862c;--line:#c5d2c8;--soft:#e6eee7}
+h1,h2,h1 em,.brand,.act-intro h3,.game-card h3,.stats-inner strong,.footer-inner strong{font-weight:700}
+.site-header{background:rgba(247,248,243,.98);border-bottom:2px solid var(--green)}
+.site-header nav{font-size:.875rem;font-weight:700}
+.brand-sub{font-size:.75rem;font-weight:700}
+.button{font-size:.875rem;border-width:2px;min-height:46px}
+.button-outline{border-color:var(--green)}
+.hero-description,.module-story,.story-text p,.game-card p,.concept-panel li,.teaching-steps p{font-size:1rem}
+.author,.module-copy p,.act-intro p,.instructor-section>div>p:not(.eyebrow),.resources-inner p:not(.eyebrow){font-size:1rem}
+.eyebrow,.small,.module-detail,.art-caption,.stats-inner span,.footer-inner p,.footer-links a,.game-meta{font-size:.875rem}
+.search-field span,.search-field input,.filter-button,.activity-check,#result-count,.text-link,.slides-link,.breadcrumb,.module-pagination{font-size:.875rem}
+.module-copy h4{font-size:1.125rem;font-weight:700}
+.module-number,.act-roman,.teaching-steps li>span{color:var(--green);font-weight:700}
+.module-copy{min-width:0}
+.module-open{font-size:.875rem;background:var(--green);color:white;padding:8px 14px;border-radius:4px;text-align:center}
+.module-open:hover{background:#235b44;color:white}
+.route-stop strong{font-size:.875rem;font-weight:700}
+.route-stop span{border:2px solid var(--green);font-weight:700}
+.act-block{border-top:2px solid var(--green)}
+.game-card{border:2px solid var(--line);border-top:4px solid var(--green)}
+.game-card .eyebrow{font-size:.75rem}
+.game-card .button{font-size:.875rem;min-height:44px}
+.concept-panel{border:2px solid var(--line);border-top:4px solid var(--green)}
+.discussion-box{border-left-width:4px}
+.module-tabs{display:flex;gap:10px;margin-top:30px;border-bottom:2px solid var(--green);padding-bottom:10px}
+.module-tabs [role="tab"]{cursor:pointer;background:transparent;border:2px solid var(--green);border-radius:4px;padding:12px 24px;font-size:1rem;font-weight:700;color:var(--green);min-height:48px}
+.module-tabs [aria-selected="true"]{background:var(--green);color:white}
+.module-tabs [role="tab"]:hover{background:var(--soft);color:var(--green)}
+.module-tabs [aria-selected="true"]:hover{background:#235b44;color:white}
+.module-activities{border-top:0;padding-top:40px}
+[role="tabpanel"]:focus-visible{outline:3px solid var(--gold);outline-offset:8px}
+@media(max-width:760px){
+  .site-header nav{font-size:.875rem;flex-wrap:wrap;justify-content:flex-start;gap:12px 20px}
+  .brand-sub{font-size:.75rem}
+  .module-row{gap:10px;align-items:flex-start}
+  .module-number{min-width:28px}
+  .module-copy h4{font-size:1rem}
+  .module-copy p,.module-story,.hero-description,.story-text p{font-size:1rem}
+  .module-actions{min-width:82px}
+  .module-open{font-size:.875rem;padding:8px 10px}
+  .slides-link{font-size:.75rem}
+  .route-stop strong,.filter-button{font-size:.875rem}
+  .filter-set{gap:8px}
+  .module-hero h1{font-size:clamp(2rem,9vw,2.5rem);overflow-wrap:break-word}
+  .module-tabs [role="tab"]{flex:1;padding:12px}
+  .module-pagination{flex-wrap:wrap;font-size:.875rem}
+  .stats-inner span,.footer-inner p,.footer-inner .small,.footer-links a{font-size:.875rem}
+}
+@media print{.module-tabs{display:none!important}[role="tabpanel"][hidden]{display:block!important}}
