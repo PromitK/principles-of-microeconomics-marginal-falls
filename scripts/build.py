@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'docs'
 COURSE = json.loads((ROOT / 'content/course.json').read_text())
 MATERIALS = json.loads((ROOT / 'content/materials.json').read_text())
-FILES = {int(f['name'].split('_')[1]): f for f in MATERIALS if f['name'].startswith('Module_')}
+FILES = {f['module']: f for f in MATERIALS}
 GAMES = {g['id']: g for g in COURSE['games']}
 ACTS = {a['id']: a for a in COURSE['acts']}
 
@@ -42,7 +42,7 @@ def module_row(m):
     game_word = f"{len(m['games'])} {'activity' if len(m['games']) == 1 else 'activities'}" if m['games'] else 'Lecture module'
     search = ' '.join([m['title'], m['topic'], m['story']] + m['concepts'])
     return f'''<article class="module-row" data-module data-search="{esc(search.lower())}" data-has-games="{'true' if m['games'] else 'false'}">
-<span class="module-number">{m['id']:02d}</span><div class="module-copy"><h4><a href="modules/module-{m['id']:02d}.html">{esc(m['title'])}</a></h4><p>{esc(m['topic'])}</p><span class="module-detail">{f['pages']} slides · {game_word}</span></div><div class="module-actions"><a class="module-open" href="modules/module-{m['id']:02d}.html">Explore</a><a class="slides-link" href="materials/{f['name']}" target="_blank" rel="noopener noreferrer" aria-label="Open slides for Module {m['id']}">Slides PDF</a></div></article>'''
+<span class="module-number">{m['id']:02d}</span><div class="module-copy"><h4><a href="modules/module-{m['id']:02d}.html">{esc(m['title'])}</a></h4><p>{esc(m['topic'])}</p><span class="module-detail">{f['pages']} slides · {game_word}</span></div><div class="module-actions"><a class="module-open" href="modules/module-{m['id']:02d}.html">Explore</a><a class="slides-link" href="modules/module-{m['id']:02d}.html#slides" aria-label="View slides for Module {m['id']}">View slides</a></div></article>'''
 
 def build_home():
     acts = []
@@ -64,6 +64,9 @@ def build_home():
 <section class="resources-section"><div class="container resources-inner"><div><p class="eyebrow">Course materials</p><h2>Lecture slides</h2><p>Open a module to read its slides and find the activities used in class.</p></div><div class="resource-actions"><a class="button button-outline" href="#modules">Find a module</a></div></div></section>'''
     (OUT / 'index.html').write_text(shell(COURSE['title'], 'A story-based Principles of Microeconomics course set in Marginal Falls, with 16 slide decks and 13 classroom activities.', content, home=True))
 
+def slide_viewer(m, f):
+    return f'''<section class="slide-panel" id="panel-slides" role="tabpanel" aria-labelledby="tab-slides" tabindex="0"><div id="slides" class="slide-viewer" data-module="{m['id']:02d}" data-count="{f['pages']}" data-width="{f['width']}" data-height="{f['height']}"><div class="slide-toolbar"><h2>Lecture slides</h2><button type="button" id="slide-fullscreen" class="viewer-button" hidden>Full screen</button></div><div class="slide-stage" tabindex="0" aria-label="Slide viewer. Use left and right arrow keys to change slides." aria-busy="true"><canvas id="slide-canvas" width="{f['width']}" height="{f['height']}" role="img" aria-label="Loading slide"></canvas><p id="slide-loading" class="slide-message" role="status">Loading slide…</p><p id="slide-error" class="slide-message" hidden>This slide could not load. <button type="button" id="slide-retry" class="viewer-button">Try again</button></p></div><div class="slide-controls"><button type="button" id="slide-prev" class="viewer-button" disabled>Previous</button><label class="slide-jump">Slide <input type="number" id="slide-page" min="1" max="{f['pages']}" value="1" aria-label="Slide number"> of {f['pages']}</label><button type="button" id="slide-next" class="viewer-button">Next</button></div><p id="slide-status" class="sr-only" aria-live="polite"></p><noscript><p>Enable JavaScript to view these slides.</p></noscript></div><script type="application/json" id="slide-descriptions">{json.dumps(f['titles'], ensure_ascii=False).replace('<', '&lt;')}</script></section>'''
+
 def build_modules():
     destination = OUT / 'modules'
     destination.mkdir(exist_ok=True)
@@ -77,7 +80,7 @@ def build_modules():
             activities = '<p class="lecture-note">This module is taught through its slide deck and classroom discussion. No dedicated live activity is used for this topic.</p>'
         prev = f'<a href="module-{m["id"] - 1:02d}.html">← Previous module</a>' if m['id'] > 1 else '<a href="../index.html#modules">← Course overview</a>'
         nextlink = f'<a href="module-{m["id"] + 1:02d}.html">Next module →</a>' if m['id'] < 16 else '<a href="../index.html#modules">Back to the course →</a>'
-        content = f'''<div class="container module-page"><nav class="breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Course home</a><span aria-hidden="true">/</span><a href="../index.html#act-{a['id']}">Act {a['roman']}</a><span aria-hidden="true">/</span><span>Module {m['id']:02d}</span></nav><header class="module-hero"><p class="eyebrow">Act {a['roman']} · {esc(a['title'])} · Module {m['id']:02d}</p><h1>{esc(m['title'])}</h1><p class="module-topic">{esc(m['topic'])}</p><div class="hero-actions"><a class="button" href="../materials/{f['name']}" target="_blank" rel="noopener noreferrer">Open lecture slides</a>{ext(f['url'], 'Google Drive copy', 'button button-outline')}</div><p class="small">{f['pages']} slides · Hubbard &amp; O'Brien, chapter {esc(m['chapter'])}. Drive access may be required.</p></header><div class="module-tabs" role="tablist" aria-label="Module content" hidden><button type="button" id="tab-overview" role="tab" aria-selected="true" aria-controls="panel-overview" tabindex="0">Overview</button><button type="button" id="tab-activity" role="tab" aria-selected="false" aria-controls="panel-activity" tabindex="-1">Activity</button></div><div class="module-body" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" tabindex="0"><section><p class="eyebrow">The story</p><h2>Where this fits in Marginal Falls</h2><p class="module-story">{esc(m['story'])}</p><div class="discussion-box"><p class="eyebrow">A question to take into class</p><p>{esc(m['question'])}</p></div></section><aside class="concept-panel"><p class="eyebrow">The economic ideas</p><h2>Concepts to follow</h2><ul>{points}</ul><p class="small">Read the slide deck for the definitions, examples, and diagrams.</p></aside></div><section class="module-activities" id="panel-activity" role="tabpanel" aria-labelledby="tab-activity" tabindex="0"><p class="eyebrow">From the slides to the classroom</p><h2>Activities used in this module</h2>{activities}<p class="small game-access">Activities open at marginalfalls.com. Students join using the room code supplied by their instructor.</p></section><nav class="module-pagination" aria-label="Module navigation">{prev}<a href="../index.html#modules">All modules</a>{nextlink}</nav></div>'''
+        content = f'''<div class="container module-page"><nav class="breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Course home</a><span aria-hidden="true">/</span><a href="../index.html#act-{a['id']}">Act {a['roman']}</a><span aria-hidden="true">/</span><span>Module {m['id']:02d}</span></nav><header class="module-hero"><p class="eyebrow">Act {a['roman']} · {esc(a['title'])} · Module {m['id']:02d}</p><h1>{esc(m['title'])}</h1><p class="module-topic">{esc(m['topic'])}</p><div class="hero-actions"><a class="button" href="#slides">View lecture slides</a></div><p class="small">{f['pages']} slides · Hubbard &amp; O'Brien, chapter {esc(m['chapter'])}.</p></header><div class="module-tabs" role="tablist" aria-label="Module content" hidden><button type="button" id="tab-overview" role="tab" aria-selected="true" aria-controls="panel-overview" tabindex="0">Overview</button><button type="button" id="tab-slides" role="tab" aria-selected="false" aria-controls="panel-slides" tabindex="-1">Slides</button><button type="button" id="tab-activity" role="tab" aria-selected="false" aria-controls="panel-activity" tabindex="-1">Activity</button></div><div class="module-body" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" tabindex="0"><section><p class="eyebrow">The story</p><h2>Where this fits in Marginal Falls</h2><p class="module-story">{esc(m['story'])}</p><div class="discussion-box"><p class="eyebrow">A question to take into class</p><p>{esc(m['question'])}</p></div></section><aside class="concept-panel"><p class="eyebrow">The economic ideas</p><h2>Concepts to follow</h2><ul>{points}</ul><p class="small">Read the slide deck for the definitions, examples, and diagrams.</p></aside></div>{slide_viewer(m, f)}<section class="module-activities" id="panel-activity" role="tabpanel" aria-labelledby="tab-activity" tabindex="0"><p class="eyebrow">From the slides to the classroom</p><h2>Activities used in this module</h2>{activities}<p class="small game-access">Activities open at marginalfalls.com. Students join using the room code supplied by their instructor.</p></section><nav class="module-pagination" aria-label="Module navigation">{prev}<a href="../index.html#modules">All modules</a>{nextlink}</nav></div>'''
         (destination / f"module-{m['id']:02d}.html").write_text(shell(f"Module {m['id']:02d}: {m['title']} | Marginal Falls", m['topic'], content, prefix='../'))
 
 def build_readme():
@@ -90,7 +93,7 @@ def build_readme():
              '- **Course website:** the complete static site is in [`docs/`](docs/index.html), ready for GitHub Pages.',
              '- **Classroom activities:** [Marginal Falls](https://marginalfalls.com/)',
              '- **Run the activities:** [instructor manual](https://marginalfalls.com/instructors/) · [request instructor access](https://marginalfalls.com/contact/)', '',
-             'The bundled PDFs are the primary slide links. The newly uploaded Drive copies currently require access; their public sharing has not been enabled.', '',
+             'Lecture slides are shown in the on-page Slides tab. The website offers no PDF download or Google Drive links.', '',
              '## The course in five acts', '',
              '| Act | The story | The economics |', '| --- | --- | --- |']
     for a in COURSE['acts']:
@@ -101,25 +104,25 @@ def build_readme():
     for m in COURSE['modules']:
         f = FILES[m['id']]
         activities = '; '.join(f"[{GAMES[g]['title']}]({GAMES[g]['url']})" for g in m['games']) or '—'
-        lines.append(f"| {m['id']:02d} | {m['title']} | {m['topic']} | {m['chapter']} | [PDF](docs/materials/{f['name']}) · [Drive]({f['url']}) | {activities} |")
+        lines.append(f"| {m['id']:02d} | {m['title']} | {m['topic']} | {m['chapter']} | [View slides](https://promitk.github.io/principles-of-microeconomics-marginal-falls/modules/module-{m['id']:02d}.html#slides) | {activities} |")
     lines += ['', '### Source differences', '',
               'The site follows the lecture deck numbering: Town Square (9), Fair Play (10), Town Crisis (11), and Hiring Hall (12), all in Act IV.', '',
               'Module 8 is named Profit and Sensitivity in its filename and Seller Sensitivity on its title slide. Its topic is price elasticity of supply.', '',
-              'The original PDFs still contain some links to econgames.promitkchaudhuri.com. The course site uses corresponding marginalfalls.com activity pages, which were checked on 2 October 2026. The Port Ledger Game is linked from Module 2 even though it is not displayed in the current homepage directory.', '',
+              'The source decks contain some older game links. The course site uses corresponding marginalfalls.com activity pages, which were checked on 2 October 2026. The Port Ledger Game is linked from Module 2 even though it is not displayed in the current homepage directory.', '',
               '## Using the course', '',
               'Students can read the relevant slides, join an activity using the room code supplied by their instructor, and return to the economic questions after the class outcome is displayed.', '',
               'Instructors should request game access before class and follow the live instructor manual. A useful sequence is to introduce the decision, run the activity, invite students to explain their choices, and connect the outcome to the economic framework in the slides.', '',
               'See [the course guide](guides/COURSE_GUIDE.md) for the teaching sequence and [publishing instructions](guides/PUBLISHING.md) for GitHub Pages.', '',
               '## Repository layout', '',
               '- `content/course.json`: course narrative, module descriptions, and activity mapping.',
-              '- `content/materials.json`: verified PDF filenames, Drive links, page counts, and SHA-256 hashes.',
-              '- `docs/`: generated website, module pages, assets, and the complete PDF collection.',
+              '- `content/materials.json`: slide counts, preview dimensions, and accessible slide descriptions.',
+              '- `docs/`: generated website, module pages, assets, and rendered slide previews.',
               '- `scripts/build.py`: dependency-free site and README generator.',
               '- `.github/workflows/pages.yml`: GitHub Pages publishing workflow.',
               '- `guides/`: course and publishing documentation.', '',
               '## Preview and update', '', 'Requires Python 3.9 or newer. No package installation or frontend build system is needed.', '',
               '```bash', 'python3 scripts/build.py', 'python3 -m http.server 8000 --directory docs', '```', '',
-              'Open `http://localhost:8000`. To change descriptions or activity links, edit `content/course.json` and rebuild. To replace PDFs, keep the stable filenames under `docs/materials/` and update the material metadata. To preserve existing Drive links, replace the corresponding Drive file rather than uploading a new copy.', '',
+              'Open `http://localhost:8000`. To change descriptions or activity links, edit `content/course.json` and rebuild. Render slide previews from private originals and update `content/materials.json`. Keep original PDFs and Drive links outside the public repository.', '',
               '## Publish with GitHub Pages', '',
               'Create a public repository named `principles-of-microeconomics-marginal-falls`, upload this folder’s contents including `.github/workflows/pages.yml`, and set **Settings → Pages → Source → GitHub Actions**. The included workflow publishes `docs/` on pushes to `main` or through a manual workflow run. See [the publishing guide](guides/PUBLISHING.md).', '',
               '## Credits and rights', '',
@@ -129,8 +132,9 @@ def build_readme():
     (ROOT / 'README.md').write_text('\n'.join(lines))
 
 if __name__ == '__main__':
-    # Keep private planning materials out of the public output.
-    (OUT / 'materials/ECON_2005_Syllabus.pdf').unlink(missing_ok=True)
+    # Never publish original decks or private planning material.
+    if list(OUT.rglob('*.pdf')):
+        raise SystemExit('Public output must contain slide previews only, no PDFs.')
     build_home()
     build_modules()
     build_readme()

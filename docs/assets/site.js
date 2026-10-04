@@ -68,5 +68,71 @@
     });
   }
   tablist.hidden = false;
+  function selectFragment() {
+    const tab = tabs.find(item => item.getAttribute('aria-controls') === `panel-${location.hash.slice(1)}`);
+    if (tab) select(tab);
+  }
   select(tabs[0]);
+  selectFragment();
+  window.addEventListener('hashchange', selectFragment);
+  document.querySelectorAll('a[href="#slides"]').forEach(link => link.addEventListener('click', () => select(tabs.find(tab => tab.id === 'tab-slides'))));
+})();
+
+
+(() => {
+  const viewer = document.querySelector('.slide-viewer');
+  if (!viewer) return;
+  const stage = viewer.querySelector('.slide-stage');
+  const canvas = document.getElementById('slide-canvas');
+  const ctx = canvas.getContext('2d');
+  const count = Number(viewer.dataset.count);
+  const width = Number(viewer.dataset.width), height = Number(viewer.dataset.height);
+  const descriptions = JSON.parse(document.getElementById('slide-descriptions').textContent);
+  const previous = document.getElementById('slide-prev'), next = document.getElementById('slide-next');
+  const jump = document.getElementById('slide-page');
+  const loading = document.getElementById('slide-loading'), error = document.getElementById('slide-error');
+  let page = 0, generation = 0, cachedSource = '', cachedImage;
+  async function show(index) {
+    page = Math.max(0, Math.min(count - 1, index));
+    const current = page, token = ++generation;
+    previous.disabled = page === 0; next.disabled = page === count - 1; jump.value = String(page + 1);
+    loading.hidden = false; error.hidden = true; stage.setAttribute('aria-busy', 'true');
+    const source = `../slides/module-${viewer.dataset.module}-${String(Math.floor(page / 8) + 1).padStart(2, '0')}.webp`;
+    try {
+      let img = cachedImage;
+      if (source !== cachedSource || !img) {
+        img = new Image();
+        await new Promise((resolve, reject) => { img.onload = resolve; img.onerror = reject; img.src = source; });
+      }
+      if (token !== generation) return;
+      cachedImage = img; cachedSource = source;
+      const slot = current % 8;
+      ctx.clearRect(0, 0, width, height);
+      ctx.drawImage(img, (slot % 2) * width, Math.floor(slot / 2) * height, width, height, 0, 0, width, height);
+      canvas.setAttribute('aria-label', `Slide ${current + 1} of ${count}. ${descriptions[current] || ''}`);
+      document.getElementById('slide-status').textContent = `Slide ${current + 1} of ${count}`;
+      loading.hidden = true;
+    } catch {
+      if (token !== generation) return;
+      loading.hidden = true; error.hidden = false;
+    } finally { if (token === generation) stage.setAttribute('aria-busy', 'false'); }
+  }
+  previous.addEventListener('click', () => show(page - 1));
+  next.addEventListener('click', () => show(page + 1));
+  jump.addEventListener('change', () => { const value = Number(jump.value); show(Number.isFinite(value) ? Math.round(value) - 1 : page); });
+  document.getElementById('slide-retry').addEventListener('click', () => { cachedSource = ''; show(page); });
+  stage.addEventListener('keydown', event => {
+    if (event.key === 'ArrowLeft') { event.preventDefault(); show(page - 1); }
+    if (event.key === 'ArrowRight') { event.preventDefault(); show(page + 1); }
+    if (event.key === 'Home') { event.preventDefault(); show(0); }
+    if (event.key === 'End') { event.preventDefault(); show(count - 1); }
+  });
+  canvas.addEventListener('contextmenu', event => event.preventDefault());
+  const full = document.getElementById('slide-fullscreen');
+  if (viewer.requestFullscreen) { full.hidden = false; full.addEventListener('click', () => {
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    else viewer.requestFullscreen().catch(() => {});
+  }); }
+  document.addEventListener('fullscreenchange', () => { full.textContent = document.fullscreenElement ? 'Exit full screen' : 'Full screen'; });
+  show(0);
 })();

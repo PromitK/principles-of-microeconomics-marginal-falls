@@ -37,12 +37,8 @@ git commit -m "Add Marginal Falls microeconomics course"
 git push -u origin main
 ```
 
-The generated course files and all PDFs are already in the `docs/` directory. No third-party packages are required to build them.
+The generated course files and slide previews are already in the `docs/` directory. No third-party packages are required to build them.
 
-## Google Drive access
+## Slide previews
 
-Each module links to its own Drive copy. Change access only for the individual lecture slide files; keep course planning documents private. The bundled lecture PDFs provide the primary links.
-
-## What remains external
-
-Creating the GitHub repository and enabling Pages requires the user's connected GitHub account. The local repository and website are complete, but a public GitHub repository URL or live Pages URL should only be reported after successful creation and deployment.
+Publish only rendered WebP previews under `docs/slides/`. Original lecture PDFs and Google Drive links must remain private. The generator rejects public output containing PDFs.

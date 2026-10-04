@@ -3,3 +3,6 @@ __pycache__/
 .DS_Store
 .venv/
 tmp/
+
+# Original decks remain private; publish preview images only.
+*.pdf
