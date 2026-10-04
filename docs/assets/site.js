@@ -129,10 +129,17 @@
   });
   canvas.addEventListener('contextmenu', event => event.preventDefault());
   const full = document.getElementById('slide-fullscreen');
-  if (viewer.requestFullscreen) { full.hidden = false; full.addEventListener('click', () => {
-    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
-    else viewer.requestFullscreen().catch(() => {});
-  }); }
-  document.addEventListener('fullscreenchange', () => { full.textContent = document.fullscreenElement ? 'Exit full screen' : 'Full screen'; });
+  function expand(active) {
+    viewer.classList.toggle('is-expanded', active);
+    document.body.classList.toggle('slides-expanded', active);
+    full.textContent = active ? 'Exit full screen' : 'Full screen';
+    full.setAttribute('aria-pressed', String(active));
+    if (!active) full.focus();
+  }
+  full.hidden = false;
+  full.addEventListener('click', () => expand(!viewer.classList.contains('is-expanded')));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && viewer.classList.contains('is-expanded')) expand(false);
+  });
   show(0);
 })();
