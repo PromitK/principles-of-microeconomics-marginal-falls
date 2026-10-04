@@ -26,7 +26,7 @@ def shell(title, description, content, prefix='', home=False):
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(title)}</title><meta name="description" content="{esc(description)}">
 <meta name="theme-color" content="#193e35"><link rel="icon" type="image/svg+xml" href="{prefix}assets/favicon.svg">
-<link rel="stylesheet" href="{prefix}assets/style.css"><script src="{prefix}assets/site.js" defer></script></head>
+<link rel="stylesheet" href="{prefix}assets/style.css?v=slides-2"><script src="{prefix}assets/site.js?v=slides-2" defer></script></head>
 <body><a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header"><div class="header-inner"><a class="brand" href="{base}" aria-label="Marginal Falls course home"><span class="brand-mark" aria-hidden="true">MF</span><span>Marginal Falls<span class="brand-sub">A course in microeconomics</span></span></a><nav aria-label="Main navigation">{nav}</nav></div></header>
 <main id="main">{content}</main>
